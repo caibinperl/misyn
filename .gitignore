@@ -1,0 +1,6 @@
+__pycache__
+.vscode
+genome/*.fa
+genome/*.gff3
+output
+misyn

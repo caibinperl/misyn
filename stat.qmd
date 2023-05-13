@@ -1,0 +1,42 @@
+---
+title: ""
+format:
+    html
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+syn <- read_tsv("output/syn_gene.tsv")
+homo <- read_tsv("output/syn_homo.tsv")
+mx <- read_tsv("output/syn_matrix.tsv")
+syn
+```
+
+```{r}
+id <- 1
+homo <- filter(homo, syn_id == id)
+mx <- filter(mx, syn_id == id)
+syn_i <- filter(syn, syn_id == id)
+fam_x <- syn_i$gene_x_id
+fam_y <- syn_i$gene_y_id
+homo_i <- filter(homo, homo_x_id == fam_x, homo_y_id == fam_y)
+```
+
+```{r}
+lm_model <- lm(homo_y_index ~ homo_x_index, homo)
+ggplot() +
+  geom_point(data = mx, mapping = aes(x, y)) +
+  geom_point(data = homo, mapping = aes(homo_x_index, homo_y_index), color="blue") +
+  geom_point(data = homo_i, mapping = aes(homo_x_index, homo_y_index), color="red")
+  # geom_abline(intercept = coef(lm_model)[[1]], slope = coef(lm_model)[[2]], color = "red")
+```
+
+```{r}
+ggplot(homo, aes(homo_x_index, homo_y_index)) +
+  geom_point(color="blue") +
+  geom_abline(intercept = coef(lm_model)[[1]], slope = coef(lm_model)[[2]], color = "red")
+
+```

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+cpp_names='chr cluster config detect gene homo main syn'
+obj_names='chr.o cluster.o config.o detect.o gene.o homo.o main.o syn.o'
+
+for cpp_name in $cpp_names
+do
+  echo $cpp_name >> /dev/tty
+  g++ -c -std=c++17 -O3 $cpp_name.cpp -o $cpp_name.o
+done
+
+g++ -static -g -o misyn $obj_names -lgsl -lgslcblas -lboost_system -lboost_filesystem
+
+strip misyn
+ls -lh misyn
+sum misyn
+
+rm -f *.o
+mv misyn ../
